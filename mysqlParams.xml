@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<params version="1.0"><datetime>2016-02-13 04:42:00</datetime><driver>mysqli</driver><host>localhost</host><port>3306</port><user>root</user><password>r00t</password><database>joomla_biovita</database><prefix>bio_</prefix><languages><language>en-GB</language><language>it-IT</language></languages><ftp_url>31.220.20.144</ftp_url><ftp_port>21</ftp_port><ftp_username>u314873642</ftp_username><ftp_password>HlOqdEjFDn5bkRAS</ftp_password><ftp_home>/</ftp_home></params>

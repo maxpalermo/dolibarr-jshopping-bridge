@@ -1,0 +1,1521 @@
+               }
+                
+                $csv[] = [
+                    $articolo => $reference,
+                    $descrizione => trim($cols[1],"\""),
+                    $prezzo_it => trim($cols[2],"\""),
+                    $prezzo_uk => number_format($price, 2,",", ".") ,
+                    $prod_price_add_title => number_format($price_add, 2,",", ".") ,
+                    $prod_id_title => $prod_id,
+                    $prod_ref_title => $prod_ref,
+                    $prod_price_title => number_format((double)$prod_price * 122 /100 , 2,",", ".") ,
+                    $prod_qty_title => $prod_qty,
+                ];
+            }
+        }
+    }
+    //print "<pre>" . print_r($csv,1) . "</pre>";
+}
+
+?>
+
+<link href="../modules/productprice/css/style.css" rel="stylesheet" type="text/css">
+<link href="../modules/productprice/js/jquery-ui/jquery-ui.css" rel="stylesheet" type="text/css">
+<link href="../modules/productprice/js/sol.css" rel="stylesheet" type="text/css">
+<style>
+    input[type="submit"]
+    {
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+    }
+    input[type="submit"]:hover
+    {
+        color: #002255;
+        text-shadow: 0px 0px 4px #ddddaa;
+    }
+    .button-side
+    {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-weight: bold;
+    }
+    .button-side:hover
+    {
+        color: #002255;
+        text-shadow: 0px 0px 4px #ddddaa;
+    }
+    .table-bartolini
+    {
+        border-collapse: collapse;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .table-bartolini td
+    {
+        border: thin solid #aaaaaa;
+        padding: 10px;
+    }
+    
+    .table-bartolini th
+    {
+        border: thin solid #aaaaaa;
+        text-align: center;
+        background-color: #55a;
+        color: #dddddd;
+        text-shadow: 1px 1px 1px #029;
+        text-transform: uppercase;
+        padding: 10px;
+    }
+    .blue-button {
+	-moz-box-shadow: 0px 0px 0px 2px #263e4d;
+	-webkit-box-shadow: 0px 0px 0px 2px #263e4d;
+	box-shadow: 0px 0px 0px 2px #263e4d;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #63b8ee), color-stop(1, #468ccf));
+	background:-moz-linear-gradient(top, #63b8ee 5%, #468ccf 100%);
+	background:-webkit-linear-gradient(top, #63b8ee 5%, #468ccf 100%);
+	background:-o-linear-gradient(top, #63b8ee 5%, #468ccf 100%);
+	background:-ms-linear-gradient(top, #63b8ee 5%, #468ccf 100%);
+	background:linear-gradient(to bottom, #63b8ee 5%, #468ccf 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#63b8ee', endColorstr='#468ccf',GradientType=0);
+	background-color:#63b8ee;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:2px;
+	border:1px solid #3866a3;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Trebuchet MS;
+	font-size:1.2em;
+	padding:10px 10px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #0b243d;
+        text-transform: uppercase;
+        margin: 10px;
+    }
+    .blue-button:hover {
+            background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #468ccf), color-stop(1, #63b8ee));
+            background:-moz-linear-gradient(top, #468ccf 5%, #63b8ee 100%);
+            background:-webkit-linear-gradient(top, #468ccf 5%, #63b8ee 100%);
+            background:-o-linear-gradient(top, #468ccf 5%, #63b8ee 100%);
+            background:-ms-linear-gradient(top, #468ccf 5%, #63b8ee 100%);
+            background:linear-gradient(to bottom, #468ccf 5%, #63b8ee 100%);
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#468ccf', endColorstr='#63b8ee',GradientType=0);
+            background-color:#468ccf;
+    }
+    .blue-button:active {
+            position:relative;
+            top:1px;
+    }
+    #div-actions input[type='radio']
+    {
+        width:16px;
+        height:16px;
+        display: block;
+        float: left;
+        margin-right: 5px;
+    }
+    #div-actions label
+    {
+        display: block;
+        float: left;
+        font-size: 1em;
+        text-shadow: 1px 1px 1px #aaaaaa;
+        width: auto;
+    }
+    #div-actions input[type='number']
+    {
+        width: auto;
+        display: block;
+        float: left;
+        text-align: right;
+        padding: 5px;
+        padding-right: 2px;
+    }
+    #div-actions ul
+    {
+        text-decoration: none;
+        list-style-type: none;
+    }
+    #div-actions li
+    {
+        text-decoration: none;
+        margin-bottom: 10px;
+    }
+    #div-actions br
+    {
+        clear: both;
+    }
+    .ui-dialog-buttonpane
+    {
+        display: block;
+    }
+    #span-message
+    {
+        text-align: left;
+        padding: 5px;
+    }
+    #waiting-gif
+    {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image: url("../modules/changelang/img/gears.gif");
+        background-position: center;
+        background-repeat: no-repeat;
+        display: none;
+        opacity: 0.8;
+    }
+    
+    .tabs-menu {
+        height: 30px;
+        float: left;
+        clear: both;
+        list-style-type: none !important;
+    }
+
+    .tabs-menu li {
+        
+        height: 30px;
+        line-height: 30px;
+        float: left;
+        margin-right: 10px;
+        background-color: #ccc;
+        border-top: 1px solid #d4d4d1;
+        border-right: 1px solid #d4d4d1;
+        border-left: 1px solid #d4d4d1;
+    }
+
+    .tabs-menu li.current {
+        position: relative;
+        background-color: #fff;
+        border-bottom: 1px solid #fff;
+        z-index: 5;
+    }
+
+    .tabs-menu li a {
+        padding: 10px;
+        text-transform: uppercase;
+        color: #fff;
+        text-decoration: none; 
+    }
+
+    .tabs-menu .current a {
+        color: #2e7da3;
+    }
+
+    .tab {
+        border: 1px solid #d4d4d1;
+        background-color: #fff;
+        float: left;
+        margin-bottom: 20px;
+        width: auto;
+    }
+
+    .tab-content {
+        width: 660px;
+        padding: 20px;
+        display: none;
+    }
+
+    #tab-1 {
+     display: block;   
+    }
+    
+    .tabs-menu li span img
+    {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 10px;
+        margin-left: 5px;
+    }
+    
+    #content
+    {
+        overflow:hidden;
+    }
+    
+    .button-square
+    {
+        padding: 10px;
+        text-transform: uppercase;
+        border-radius: 5px;
+        border: 1px solid #555555;
+    }
+    .button-square:hover
+    {
+        text-shadow: 1px 1px 1px #aaaaaa;
+        box-shadow: 2px 2px 4px #aaaaaa;
+    }
+    #div-display table
+    {
+        border-collapse: collapse;
+    }
+    #div-display table tbody tr:nth-child(odd)
+    {
+        background-color: #dddddd;
+    }
+    #div-display table thead tr th
+    {
+        text-align: center;
+        padding: 10px;
+        font-size: 1.2em;
+        font-weight: bold;
+        
+    }
+    #div-display table tbody tr td
+    {
+        padding: 5px;
+        border: thin solid #aaaaaa;
+    }
+    #div-display table tbody tr td:nth-child(1)
+    {
+        text-align: right;
+    }
+    #div-display table tbody tr td:nth-child(2)
+    {
+        text-align: left;
+    }
+    #div-display table tbody tr td:nth-child(3)
+    {
+        text-align: left;
+    }
+    #div-display table tbody tr td:nth-child(4)
+    {
+        text-align: right;
+    }
+    #div-display table tbody tr td:nth-child(5)
+    {
+        text-align: right;
+    }
+    #div-display table tbody tr td:nth-child(6)
+    {
+        text-align: right;
+    }
+    #div-display table tbody tr td:nth-child(7)
+    {
+        text-align: left;
+    }
+    #div-display table tbody tr td:nth-child(8)
+    {
+        text-align: right;
+    }
+    #div-display table tbody tr td:nth-child(9)
+    {
+        text-align: right;
+    }
+    #div-display .missing
+    {
+        background-color: #e4b9b9 !important;
+    }
+    #div-display .negative
+    {
+        color: #ffffff;
+        text-shadow: 1px 1px 1px #222222;
+        font-weight: bold;
+        background-color: #B81900;
+    }
+    #div-display .nomatch
+    {
+        color: #ffffff;
+        text-shadow: 1px 1px 1px #222222;
+        font-weight: bold;
+        background-color: #733;
+    }
+    .cn 
+    {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        position:absolute;
+        top: 0;
+        left: 0;
+        background-color: transparent;
+        background-image: url("../modules/changelang/img/gears.gif");
+        background-position: 20px 80px;
+        background-repeat: no-repeat;
+        display: none;
+    }
+    .inner-div 
+    {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%,-50%);
+        width: 900px;
+        height: 500px;
+        border-radius: 5px;
+        border: thin solid #aaaaaa;
+        padding: 10px;
+        box-shadow: 2px 2px 4px #aaaaaa;
+        background-color: #ffffff;
+        z-index: 100;
+    }
+    .table-rows
+    {
+        border-collapse: collapse;
+        border: none;
+    }
+    .table-rows th
+    {
+        text-align: left;
+        border: 1px solid #aaaaaa;
+        padding: 10px;
+        background-color: #cccccc;
+    }
+    .table-rows tr
+    {
+        border-bottom: 1px solid #aaaaaa;
+    }
+    .table-rows td
+    {
+        padding-bottom: 10px;
+    }
+    .table-rows td
+    {
+        padding: 10px;
+    }
+    .tab
+    {
+        width: calc(100% - 50px);
+    }
+    .wait-div 
+    {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: white;
+        background-image: url("../modules/productprice/img/gears.gif");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 256px;
+        opacity: 0.8;
+        z-index: 100;
+        display: none;
+    }
+    
+    .check-yes
+    {
+        width: 16px;
+        height: 16px;
+        background: transparent;
+        background-image: url("../modules/productprice/img/check.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+    }
+    
+    .check-no
+    {
+        width: 16px;
+        height: 16px;
+        background: transparent;
+        background-image: url("../modules/productprice/img/error.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+    }
+    
+    
+</style>
+
+<div class="wait-div"></div>
+
+<form method="POST" id="form-price" style="overflow: hidden;" enctype="multipart/form-data">
+    
+    <fieldset>
+        <legend>Formula modifica prezzi</legend>
+        <label>Valore</label>
+        <input type="text" id="price-add" name="price-add" value="<?=$price_round_add;?>">
+        <select name="type-add" id="type-add">
+            <option value="0" <?php if($price_round_mode==0){print " selected='selected'";} ?> >Percentuale</option>
+            <option value="1" <?php if($price_round_mode==1){print " selected='selected'";} ?> >Prezzo</option>
+        </select>
+        <br>
+        <br>
+        <label>Minimo arrotondamento EUR</label>
+        <input type="text" value="<?=$price_round_min;?>" name="min-round" id="min-round">
+        <br>
+        <br>
+        <label>Arrotonda</label>
+        <select name="type-round" id="type-round">
+            <option value="0" <?php if($price_round_type==0){print " selected='selected'";} ?> >Standard</option>
+            <option value="1" <?php if($price_round_type==1){print " selected='selected'";} ?> >Difetto</option>
+            <option value="2" <?php if($price_round_type==2){print " selected='selected'";} ?> >Eccesso</option>
+        </select>
+        <br>
+        <br>
+        <label>Quantit&agrave;</label>
+        <input type="number" value="<?=$qty;?>" name="qty" id="qty">
+        <br>
+        <br>
+        <label>Da data</label>
+        <input type="text" name="from_date" id="from_date" value="<?php print $from_date; ?>">
+        <br>
+        <br>
+        <label>a data</label>
+        <input type="text" name="to_date" id="to_date" value="<?php print $to_date; ?>">
+        <br>
+        <br>
+        <input type="submit" class="button-square" value="IMPOSTA" style="float: right; margin-right: 10px;">
+        <br>
+        <br>
+    </fieldset>
+    <br style="clear: both;">
+    <br>
+    
+    <div id="tabs-container">
+        <ul class="tabs-menu">
+            <li class="current">
+                <span>
+                    <img src="../modules/productprice/img/icn-check.png">
+                    <a href="#tab-1">Controlla prodotti</a>
+                </span>
+            </li>
+            <li>
+                <span>
+                    <img src="../modules/productprice/img/icn-price.png">
+                    <a href="#tab-2">Prezzi e sconti</a>
+                </span>
+            </li>
+        </ul>
+        <div class="tab">
+            <div id="tab-1" class="tab-content" style="overflow: hidden; overflow-y: scroll; width: auto; height: 600px;">
+                <fieldset>
+                    <legend>Documento CSV</legend>
+                    <input type="file" id="import-csv" name="import-csv">
+                    <input type="submit" class="button-square" value="CONTROLLA">
+                    <br>
+                </fieldset>
+                <br>
+                <fieldset>
+                    <legend>Elenco prodotti</legend>
+                    <div>
+                        <input type="hidden" name="action" value="0">
+                        <input type="button" value="Sincronizza prezzi" id="btn-sync-price" class="button-square">
+                        <input type="button" value="Azzera quantit&agrave; negative" id="btn-zero-qty" class="button-square">
+                        <input type="button" value="Esporta prezzi" id="btn-export-price" class="button-square">
+                        
+                    </div>
+                    <div id='div-display'>
+                        <table id="table-product">
+                            <thead>
+                                <tr>
+                                    <th>prog.</th>
+                                    <th>Ref.</th>
+                                    <th>Descrizione</th>
+                                    <th>Prezzo</th>
+                                    <th>Aumento</th>
+                                    <th>codice</th>
+                                    <th>Ref. int.</th>
+                                    <th>Prezzo</th>
+                                    <th>Qta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                if(!empty($csv))
+                                {
+                                    $row_count = 1;
+                                    foreach($csv as $row)
+                                    {
+                                        if($row[$prod_ref_title]==$empty_row)
+                                        {
+                                            $tr_class = "class='missing'";
+                                        }
+                                        else
+                                        {
+                                            $tr_class="";
+                                        }
+                                        
+                                        if($row[$prod_qty_title]<0)
+                                        {
+                                            $td_qty = "class='negative'";
+                                        }
+                                        else
+                                        {
+                                            $td_qty = "";
+                                        }
+                                        
+                                        if($row[$prod_price_title]!=$row[$prod_price_add_title])
+                                        {
+                                            $td_nomatch = "class='nomatch'";
+                                        }
+                                        else
+                                        {
+                                            $td_nomatch = "";
+                                        }
+                                        
+                                        if($row[$prod_id_title]==$empty_row)
+                                        {
+                                            $row[$prod_price_title] = $empty_row;
+                                            $td_nomatch = "";
+                                        }
+                                        
+                                        print "<tr $tr_class>";
+                                            print "<td>" . $row_count . "</td>";
+                                            print "<td>" . $row[$articolo] . "</td>";
+                                            print "<td>" . $row[$descrizione] . "</td>";
+                                            print "<td>" . $row[$prezzo_uk] . "</td>";
+                                            print "<td>" . $row[$prod_price_add_title] . "</td>";
+                                            print "<td>" . $row[$prod_id_title] . "</td>";
+                                            print "<td>" . $row[$prod_ref_title] . "</td>";
+                                            print "<td $td_nomatch>" . $row[$prod_price_title] . "</td>";
+                                            print "<td $td_qty>" . $row[$prod_qty_title] . "</td>";
+                                        print "</tr>";
+                                        $row_count++;
+                                    }
+                                }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+                <br>
+            </div>
+            <div id="tab-2" class="tab-content" style="overflow: hidden; overflow-y: auto; width: auto; height: 600px;">
+                <div>
+                    <fieldset>
+                        <legend>Categorie</legend>
+                        <select id="categories" name="categories" multiple='multiple'></select>
+                        <input type="hidden" name="hidden-categories" id="hidden-categories">
+                    </fieldset>
+                    <br>
+                    <fieldset>
+                        <legend>Produttori</legend>
+                        <select id="manufacturers" name="manufacturers" multiple='multiple'></select>
+                        <input type="hidden" name="hidden-manufacturers" id="hidden-manufacturers">
+                    </fieldset>
+                    <br>
+                    <fieldset>
+                        <legend>Caratteristiche</legend>
+                        <select id="features" name="features" multiple='multiple'></select>
+                        <input type="hidden" name="hidden-features" id="hidden-features">
+                    </fieldset>
+                </div>
+                <br>
+                <div>
+                    <input type="button" class="button-square" value="CERCA" onclick="getProducts();">
+                    <input type="button" class="button-square" value="ESEGUI SCONTO" onclick="doPriceDisc();" id="btn-execute" style="display: none;">
+                    <input type="button" class="button-square" value="VARIA PREZZO" onclick="doPriceVar();" id="btn-price-var" style="display: none;">
+                    <input type="button" class="button-square" value="STAMPA" onclick="doPrint();" id="btn-print" style="display: none;">
+                </div>
+                <br>
+                <div>
+                    <fieldset>
+                        <legend>Elenco Prodotti</legend>
+                        <div id="div-products"></div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <br>    
+</form>
+<div id="dialog-message" title="---" style="display:none;">
+  <p>
+      <span id="span-icon" class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+      <span id="span-message">These items will be permanently deleted and cannot be recovered. Are you sure?</span>
+  </p>
+</div>
+<div class="cn" id="ajax-message">
+    <div style="overflow: hidden;">
+        <div class="inner-div" id="inner-msg" style="overflow-y: auto;padding: 20px;"></div>
+        <br>
+        <input type="button" class="button-square" value="INTERROMPI" onclick="stop=true;" style="top: 200px;">
+        <input type="button" class="button-square" value="CHIUDI" onclick="$('#ajax-message').fadeOut();" style="top: 200px;">
+        <br>
+    </div>
+</div>
+
+<div id="dialog-confirm" title="RICHIESTA">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Eseguire l'operazione?</p>
+</div>
+
+<div id="dialog-print" title="RICHIESTA">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Selezionare il tipo di stampa.</p>
+</div>
+
+<div class='waiting-gif' id='waiting-gif'></div>
+<script type="text/javascript" src="../modules/productprice/js/jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript" src="../modules/productprice/js/jquery-ui/datepicker-it.js"></script>
+<script type="text/javascript" src="../modules/productprice/js/dd_slick.js"></script>
+<script type="text/javascript" src="../modules/productprice/js/sol.js"></script>
+<script type="text/javascript">
+    var prices = []; //Array dei prezzi da aggiornare
+    var stop = false; //if true stop sync.
+    
+    $(document).ready(function(){
+        var ddData = <?=$classLang->getJSONData();?>
+        
+        $("#from_date").datepicker({
+            prevText: "",
+            nextText: "",
+            dateFormat: "yy-mm-dd"
+        });
+        
+        $("#to_date").datepicker({
+            prevText: "",
+            nextText: "",
+            dateFormat: "yy-mm-dd"
+        });
+        
+        $("#form-price").on("submit",function(e){
+            e.preventDefault();
+            if($("#tab-1").is(":visible"))
+            {
+                $("#form-price").submit();
+            }
+        });
+        
+        $('#categories').searchableOptionList({
+            data: "../modules/productprice/ajax/cmb_categories.php",
+            maxHeight: '250px',
+            showSelectAll: true,
+            events:{
+                onChange: function(sol,changedElements){
+                    var elements = $("#categories").searchableOptionList().getSelection();
+                    var $values = Array();
+                    console.log(elements);
+                    for(var i=0;i<elements.length;i++)
+                    {
+                       $values.push(elements[i].value);
+                       //console.log("value: " + elements[i].value);
+                    }
+                    $("#hidden-categories").val($values.join());
+                    console.log($("#hidden-categories").val());
+                }
+            }
+                
+        });
+        
+        $('#manufacturers').searchableOptionList({
+            data: "../modules/productprice/ajax/cmb_manufacturers.php",
+            maxHeight: '250px',
+            showSelectAll: true,
+            events:{
+                onChange: function(sol,changedElements){
+                    var elements = $("#manufacturers").searchableOptionList().getSelection();
+                    var $values = Array();
+                    console.log(elements);
+                    for(var i=0;i<elements.length;i++)
+                    {
+                       $values.push(elements[i].value);
+                       //console.log("value: " + elements[i].value);
+                    }
+                    $("#hidden-manufacturers").val($values.join());
+                    console.log($("#hidden-manufacturers").val());
+                }
+            }
+        });
+        
+        $('#features').searchableOptionList({
+            data: "../modules/productprice/ajax/cmb_features.php",
+            maxHeight: '250px',
+            showSelectAll: true,
+            events:{
+                onChange: function(sol,changedElements){
+                    var elements = $("#features").searchableOptionList().getSelection();
+                    var $values = Array();
+                    console.log(elements);
+                    for(var i=0;i<elements.length;i++)
+                    {
+                       $values.push(elements[i].value);
+                       //console.log("value: " + elements[i].value);
+                    }
+                    $("#hidden-features").val($values.join());
+                    console.log($("#hidden-features").val());
+                }
+            }
+        });
+        
+        
+        $(".tabs-menu a").click(function(event) {
+            event.preventDefault();
+            $(this).parent().parent().addClass("current");
+            $(this).parent().parent().siblings().removeClass("current");
+            var tab = $(this).attr("href");
+            $(".tab-content").not(tab).css("display", "none");
+            $(tab).fadeIn();
+        });
+        
+        
+        
+        $('#slick_lang').ddslick({
+            data: ddData,
+            width: 300,
+            imagePosition: "left",
+            selectText: "Seleziona la lingua",
+            onSelected: function (data) {
+                console.log(data);
+                var $value = data.selectedData.value;
+                $("#id-from").val($value);
+                if($value===0)
+                {
+                    $('#div-actions').fadeOut();
+                }
+                else
+                {
+                    $('#div-actions').fadeIn().css({"display" : "inline-block"});
+                }
+            }
+        });
+        
+        $('#btn-execute').on("click",function()
+        {   
+            var selectedIndex = $("#form-lang input[name='radio-actions[]']:checked").index("#form-lang input[name='radio-actions[]'");
+    
+            if(selectedIndex===0) //Delete current language
+            {
+                deleteCurrentLanguage();
+            }
+            else if(selectedIndex===1) //Delete other languages
+            {
+                deleteOtherLanguages();
+            }
+            else if(selectedIndex===2) //Set new index
+            {
+                setNewIndex();
+            }
+            
+            $('#div-log').fadeIn();
+        });
+    });
+    
+    $("#btn-export-price").on("click",function(){
+        $("#span-message").html("<p>Questa operazione esporter&agrave; i prezzi in formato CSV.</p><p>Continuare?</p>");
+        $('#dialog-message').dialog({
+            title           : "Richiesta",
+            resizable       : true,
+            height          : "auto",
+            modal           : true,
+            buttons         :   {
+                                    "Continua": function() 
+                                    {
+                                        $( this ).dialog( "close" );
+                                        preparePrices();
+                                        expPrices();
+                                    },
+                                    "Annulla": function() 
+                                    {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+        });
+    });
+    
+    $("#btn-sync-price").on("click",function(){
+        $("#span-message").html("<p>Questa operazione sincronizzer&agrave; i prezzi con l'aumento impostato.</p><p>Continuare?</p>");
+        $('#dialog-message').dialog({
+            title           : "Richiesta",
+            resizable       : true,
+            height          : "auto",
+            modal           : true,
+            buttons         :   {
+                                    "Continua": function() 
+                                    {
+                                        $( this ).dialog( "close" );
+                                        preparePrices();
+                                        syncPrices(0);
+                                    },
+                                    "Annulla": function() 
+                                    {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+        });
+    });
+    
+    $("#btn-zero-qty").on("click",function(){
+        $("#span-message").html("<p>Questa operazione azzerer&agrave; le quantit&agrave; negative presenti in magazzino.</p><p>Continuare?</p>");
+        $('#dialog-message').dialog({
+            title           : "Richiesta",
+            resizable       : true,
+            height          : "auto",
+            modal           : true,
+            buttons         :   {
+                                    "Continua": function() 
+                                    {
+                                        $( this ).dialog( "close" );
+                                        zeroPrices();
+                                    },
+                                    "Annulla": function() 
+                                    {
+                                        $( this ).dialog( "close" );
+                                    }
+                                }
+        });
+    });
+    
+    function expPrices()
+    {
+        $("#inner-msg").html("");
+        $("#ajax-message").fadeIn();
+        stop=false;
+        
+        $.ajax({
+            url: "../modules/productprice/ajax/exp_prices.php",
+            method: "POST",
+            success: function(msg)
+            {           
+                
+                var prods = JSON.parse(msg);
+                for(var i=0;i<prods.length;i++)
+                {
+                    var prod = prods[i];
+                    if(String(prod.reference).indexOf("ISA")===0)
+                    {
+                        /*
+                        var row = "<pre>" 
+                                + "ID: " + prod.id
+                                + "\tREF: " + prod.reference 
+                                + "\tPRICE: " + prod.price_notax 
+                                + "\tTAX: " + prod.tax
+                                + "\tPRICE TAX: " + prod.price_tax
+                                + "</pre>";
+                        */
+                        $("#inner-msg").prepend("<pre>" + prod.query + "<pre>");
+                    }
+                }
+                
+            }
+        });
+    }
+    
+    function preparePrices()
+    {
+        stop = false;
+        var table = $("#table-product");
+        var rows  = $(table).find("tbody").find("tr");
+        prices = [];
+        
+        for(var i=0;i<rows.length;i++)
+        {
+            var id_product = $(rows[i]).find("td:nth-child(6)").text();
+            var price_val  = String($(rows[i]).find("td:nth-child(5)").text()).replace(",",".");
+            if(Number(id_product)>0)
+            {
+                var price = {
+                    "id"    : id_product,
+                    "price" : price_val 
+                };
+                prices.push(price);
+            }
+            
+        }
+        
+        console.log(prices);
+    }
+    
+    function syncPrices(index)
+    {
+        $("#inner-msg").html("");
+        $("#ajax-message").fadeIn();
+        var price = prices[index];
+        var len   = prices.length;
+        var next  = index+1;
+        if (next===len)
+        {
+            next=0;
+        }
+        
+        $.ajax({
+            url: "../modules/productprice/ajax/sync_price.php",
+            method: "POST",
+            data:
+            {
+                id    : price.id,
+                price : price.price
+            },
+            success: function(msg)
+            {
+                var current = Number(index)+1;
+                var msg_ = "<p>(" + current + "/" + len + ") " + msg + "</p>"; 
+                        
+                $("#inner-msg").prepend(msg_);
+                if(next===0)
+                {
+                    $("#inner-msg").prepend("Operazione Completata.");
+                }
+                if(stop===true)
+                {
+                    $("#inner-msg").prepend("Operazione Interrotta.");
+                }
+                else
+                {
+                    syncPrices(next);
+                }
+            }
+        });
+    }
+    
+    function zeroPrices()
+    {
+        
+        $("#inner-msg").html("");
+        $("#ajax-message").fadeIn();
+        stop=false;
+        
+        $.ajax({
+            url: "../modules/productprice/ajax/update_under_zero.php",
+            method: "POST",
+            success: function(msg)
+            {
+                $("#inner-msg").prepend(msg);
+                recalc_qty();
+            }
+        });
+    }
+    
+    function recalc_qty()
+    {
+        $.ajax({
+            url: "../modules/productprice/ajax/recalc_qty.php",
+            method: "POST",
+            success: function(msg) //returns list with id_product=>qty;
+            {
+                var list = JSON.parse(msg);
+                if(list.length)
+                {
+                    update_qty(list,0);
+                }
+            }
+        });
+    }
+    
+    function update_qty(list,index)
+    {
+        if(index===list.length)
+        {
+            update_qty_no_combinations();
+            $("#inner-msg").prepend("<p>Operazione completata</p>");
+            return;
+        }
+        
+        var product = list[index];
+        $.ajax({
+            url: "../modules/productprice/ajax/update_qty.php",
+            method: "POST",
+            data:
+            {
+                id : product.id,
+                qty: product.qty
+            },            
+            success: function(msg)
+            {
+                $("#inner-msg").prepend("<p>("+ (Number(index)+1) + "/" + list.length + ") " + msg + "</p>");
+                index++;
+                update_qty(list,index);
+            }
+        });
+    }
+    
+    function update_qty_no_combinations()
+    {
+        $.ajax({
+            url: "../modules/productprice/ajax/update_qty_product.php",
+            method: "POST",         
+            success: function(msg)
+            {
+                $("#inner-msg").prepend("<p>(" + msg + "</p>");
+            }
+        });
+    }
+    
+    function getProducts()
+    {
+        var categories      = $("#hidden-categories").val();
+        var features        = $("#hidden-features").val();
+        var manufacturers   = $("#hidden-manufacturers").val();
+        var value           = $("#price-add").val();
+        var mode            = $("#type-add").val();
+        var min             = $("#min-round").val();
+        var type            = $("#type-round").val();
+        
+        //console.log("\nvalue: " + value + "\nmode:" + mode + "\nmin:" + min + "\ntype:" + type);
+        
+        $(".wait-div").fadeIn().delay(1000);
+        
+        
+        
+        $.ajax({
+            url: "../modules/productprice/ajax/getProducts.php",
+            method: "POST", 
+            data: {
+                "categories" : categories,
+                "features" : features,
+                "manufacturers" : manufacturers,
+                "id" : "table-product",
+                "name" : "table-product",
+                "class" : "table-rows",
+                "value" : value,
+                "mode" : mode,
+                "min" : min,
+                "type" : type
+            },
+            success: function(msg)
+            {
+                $("#div-products").html(msg);
+                $(".wait-div").fadeOut();
+                $("#btn-execute").fadeIn();
+                $("#btn-price-var").fadeIn();
+                $("#btn-print").fadeIn();
+            }
+        });
+    }
+    
+    function doPrint()
+    {
+        $( "#dialog-print" ).dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "PDF": function() {
+                    
+                    $( this ).dialog( "close" );
+                },
+                "CSV": function() {
+                    
+                    $( this ).dialog( "close" );
+                },
+                "ANNULLA": function() {
+                  $( this ).dialog( "close" );
+                }
+            }
+        });
+    }
+    
+    function doPriceDisc()
+    {
+        $( "#dialog-confirm" ).dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "ESEGUI": function() {
+                    $('.wait-div').fadeIn();
+                    doPrice();
+                    $( this ).dialog( "close" );
+                },
+                "ANNULLA": function() {
+                  $( this ).dialog( "close" );
+                }
+            }
+        });
+    }
+    
+    function doPriceVar()
+    {
+        $( "#dialog-confirm" ).dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "ESEGUI": function() {
+                    $('.wait-div').fadeIn();
+                    $( this ).dialog( "close" );
+                    doPriceVariation();
+                },
+                "ANNULLA": function() {
+                  $( this ).dialog( "close" );
+                }
+            }
+        });
+    }
+    
+    function doPriceVariation(index=0)
+    {
+        console.log("PRICE VARIATION index: " + index);
+        var rows = $("#table-product tbody tr");
+        var totRows = rows.length;
+        if(index==totRows){$(".wait-div").fadeOut();return;}
+        var row = rows[index];
+        var checked = $(row).find("input:checkbox").is(":checked");
+        var id      = $(row).find("td:nth-child(2)").text();
+        var ref     = $(row).find("td:nth-child(3)").text();
+        var label   = $(row).find("td:nth-child(4)").text(); 
+        var price   = $(row).find("td:nth-child(5)").text();
+        var nprice  = $(row).find("td:nth-child(6)").text();
+        var type    = $("#type-add").val()==0?"percentage":"amount";
+        var redprice= Number($("#price-add").val())/100;
+        var qty     = Number($("#qty").val()).valueOf();
+        var dfrom   = $("#from_date").val();
+        var dto     = $("#to_date").val();
+        
+        if(Number(dfrom).valueOf()==0){dfrom=0;}
+        if(Number(dto).valueOf()==0){dto=0;}
+        
+        var product = {
+            "id_product"        : id,
+            "price"             : nprice
+        };
+        
+        var json_prod = JSON.stringify(product);
+        
+        //console.log("index " + index + " is " + checked);
+        //console.log("parameters: \nqty=" + qty + "\nFrom: " + dfrom + "\nTo: " + dto + "\n");
+        if(checked)
+        {
+            //console.log("product: " + id + "\n" + ref + "\n" + label + "\n" + price + "\n" + nprice + "\n===================================");
+            $.ajax({
+                type: "POST",
+                url: "../modules/productprice/ajax/varPrice.php",
+                data: {"product" : json_prod},
+                success: function(msg)
+                {
+                    var obj_msg = JSON.parse(msg);
+                    
+                    console.log(obj_msg.message);
+                    
+                    if(obj_msg.result==0)
+                    {
+                        $(row).find("td:nth-child(1)").html("<div class='check-no'></div>");
+                    }
+                    else
+                    {
+                        $(row).find("td:nth-child(1)").html("<div class='check-yes'></div>");
+                    }
+                    
+                }
+            });
+        }
+        
+        index++;
+        doPriceVariation(index);
+    }
+    
+    function doPrice(index=0)
+    {
+        var rows = $("#table-product tbody tr");
+        var totRows = rows.length;
+        if(index==totRows){$(".wait-div").fadeOut();return;}
+        var row = rows[index];
+        var checked = $(row).find("input:checkbox").is(":checked");
+        var id      = $(row).find("td:nth-child(2)").text();
+        var ref     = $(row).find("td:nth-child(3)").text();
+        var label   = $(row).find("td:nth-child(4)").text(); 
+        var price   = $(row).find("td:nth-child(5)").text();
+        var nprice  = $(row).find("td:nth-child(6)").text();
+        var type    = $("#type-add").val()==0?"percentage":"amount";
+        var redprice= Number($("#price-add").val())/100;
+        var qty     = Number($("#qty").val()).valueOf();
+        var dfrom   = $("#from_date").val();
+        var dto     = $("#to_date").val();
+        
+        if(Number(dfrom).valueOf()==0){dfrom=0;}
+        if(Number(dto).valueOf()==0){dto=0;}
+        
+        var product = {
+            "id_product"        : id,
+            "from_quantity"     : qty,
+            "reduction"         : redprice,
+            "reduction_type"    : type,
+            "from"              : dfrom,
+            "to"                : dto
+        };
+        
+        var json_prod = JSON.stringify(product);
+        
+        //console.log("index " + index + " is " + checked);
+        //console.log("parameters: \nqty=" + qty + "\nFrom: " + dfrom + "\nTo: " + dto + "\n");
+        if(checked)
+        {
+            //console.log("product: " + id + "\n" + ref + "\n" + label + "\n" + price + "\n" + nprice + "\n===================================");
+            $.ajax({
+                type: "POST",
+                url: "../modules/productprice/ajax/doPrice.php",
+                data: {"product" : json_prod},
+                success: function(msg)
+                {
+                    console.log(msg);
+                }
+            });
+        }
+        
+        index++;
+        doPrice(index);
+    }
+</script>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ¨šÂ^­ÑÌäòÁ³PÉäF`ÇB0ÜµíşÈrıñ¹ÑX4°2ˆ!ÖßvªåïşäF4Äkª†SD¯íïcr|÷ÇqkÚİPDSUruÍ¦zBwbz5LWŞk\™½½v‹åxIp’6å^£+ ÀSÅ	ã=×‰åCóË'âòŞõ+(Šw›5&ŠéØ•ëk'ÎœÁ!·Óht-¾uo¿µ¸0uåİwã™Ñb!ÎÚõà“gÏRhĞâò0D~kjZ­rP« …b±RŞ‚èo©·ïÖ’)[G8vs½jsz~±¼±ÑSe.^(,ŒOÀ4æ7rË[ªf†"C‘LS-Ôù|¹¼% iµ›0NA¶,t;‚ Éš™ˆG·wöY–İİZ'	jg+’)
+í†éÂ›÷n+Õ«ü%eì³à·aXõ·»å­ZCúÒ«_Ë&"}¿¤|ªª²¡4I@ÀY€ÀZúN‚?ñÅ~.”Ë2°gç
+Åå“gP¤ïXö«s¯_y;_šO„û›+ŠXmõ[ºts­4jf|Ä²- `lÛ‚`p,d˜~òGÛ¡}¯ÃAPÄv€»Šb°{PñÇÍÊã1¤ú[,œˆÇãš®¿ñ“×‹3#(#îµkW{öÙg,©czx<Bßºµ>6^´MÈš¡©.Œ¸¶œÓX$,	]ÇuƒÂ‡¢®®æÅò­+ÕhvbØ%L‰µíÍr.?¾¹µ]*ƒóÁqbÀJ(hˆ“„"¨ßrAûŸ">Ñõ¢ûÁb)¡VşÛz¢è[÷î©Š–Îä]fbé(O«ºÑØÙRàP„/*rï'¯ÿHUM®­Š‘ÀÍt'KÍJ¹ÖÓK?NûÅW^¦\ãïÿæ¯=Œ±¬kwrÙõÌØt<äG6LİµuwpzìBî ¹£?¼ğĞ|xG?¸ñ…&ˆì±şã“/¼ğYMêTÚÊ©ËeºÄ°,°&…ÇVèJ7(Š(E€Øa(®gÉ—¯ÜñËq÷â0Á“¥¸PúôÅç=Ï^»½yöÜÓËósÍq4aØG µ¶Ó¯Äõ‘ûçú>ÿ£¯ÁË€è>Cä·^ZJ7jµÅ“q¡okûÛë[µÕ“QbĞ·%2ÙL4‘ôë_[»cs4{X«)2‚“–®x(>·¸$u›¹±ÉD4ìeı(®c©—ß|'Ïçs‡çÜïÇŠ!òÛÖÁök—îÖ*µx:ciZ8Ç=ã -æÒív·&T‡>µ8^Ş.×uÀW-ÓD%pÈbÉ”g*µV/Äó|$²´r"‰Ë?{ãõzµôh.[?ØMŒL8r³¥8Q×TyiaîxWtHëSˆ!ò[ÇÔ7Ö7Y988à9PeÉ0¢‘°iš,Ç’ìHÄÃı¢&ÈÙ)o›–ë:–®ÛÜ)W„s<¿~ç¦lÓcH¥f:À¶»½±RœP¯ÆcQQ’±n/ÆÑ$òaŞ0¬a\ CÌO²òçßúV·YÙo€‡{Ú±m@<mCi÷¤Ïà(×·'N~dléÄiñù®¿ëáWß»½´ºzáü9à’tUÕÅÄf­%¨ßøæŸÁ¶zóöæÒê
+=c»†xfÃ0 ÌÏ/PÃŠß¦&§e¡Û¨WïŞ¹Wš[l5Š“˜{íêUp§Ï?óëšƒ%£¬$ÉşÈ0Mõ`ÈÔuA£#²(¬õtÇß,AøPœã5¡ÛŞÙ¼Ç&òº,)²Dó±¹óÚo.­IÅÂ‡ç×ÛáB}J1D~+5÷şöÿ ~Kİ¼}[Su8².ÓÉ|>æï‘ŒN×¦âáq±×úÉÆñ˜ß¢9S““~r×ç·(ÍÉç·æÿú»ï¸mïoğÛlq&Ì ±xJ:ød‚”ŸÇaò[.ñÂŸyßúÁuÄŸ|›N§ptôßÒÜx)úaøíùÏ=Èoq†§qHÒœtŒß¯¶‚qaÃÀ'ÍoÛÍº¢¦eã(áïW|<~k;··/ëv?ñ'ğ??>a~kí7Zb¯{ş³/Óz½c<~›Ÿ€õöÏŞ|wñÄSSÅ‘p˜øícÇ'ÈoKi±x’ÆıÈHftŒ3‘Áo%\èE²P(2a;nŠ>A~ëø…¸P5€¢ôÙ,ıqù­‡"ğyÑeQPŒÃó”ÇcÅ'Éo1‡¯¼}ùöFåÕ¯~4ÍıXü–â"jg÷ÛıÏ|î‹#éØáùüö±âå·®¡àáäâì¤$ô¹!8ôÇã·³!Ú›œ_Dmµ+¢#P>à·Ÿ,¿í§îà$L$p,÷8ø-¬˜^2ÌüvHø¤ùm³^Õm?•Ë_î1ğ[])ï¹H8—Ë_ =+†Ïo«µxÊç·¡hŒÆ ›k7ÿÃ¯|Ym”%õùmù£ğÛZÂã·“®°ó?zë+_ı2GSÑhøhÄíQŸ £·A•Ë#cˆüÖ6µõ{}~»¿î2¡)ŠmgFŠ(„èš–/Œ«6ì8äÚ~ë¹¶æóÛnù wŸß}~{ò´ßµjkıJñb§–ˆE%YÆ{½Á\]E\Ûé7àõsÃüöA@İŸ2b±ş6’ùÖüV¯Uİ«K~ëï¯û›R²şİs€ ,Ÿ:ƒô7/P?wØ¸zıÖÒêÉÎ#ÚkÖt˜P:ÍdüÉŸş¹g©W¯ß^:yŠ„/úüEŸ†aKUº’Òo°Œ$>şáFÀ1yd‘ßjŠØév(&"¤òÎn<¿~0Øı­»Ä\E‰eıÆQ¶‡ÆÃÔÚí;ÅññÉÉ’¡ÉşŞ¹i£‚ùµ)–„n×óœåÕUØÖZ²BSL§YsŒc9c{İ¶i»ªØZßi=}ş¬®È¶©Wëíùå%,ğ]CìŸ,µ*?}û&ê¨×î•#lhl¢¨İ(‘8&j:¢·ßşyŒ&ç²a¬g‘…qMéıôÇ?l·æ¨¯²áÀa–‘IT EzBÛ§/¾4CüÚkK]ºòŞÂüB»z€´gûüÈ°Â×Ö®$ã)>-r@È86WCìŸLGsÏ\µšâÌ2"|8,÷º¶‡piXpcYÂ*KôGĞA­!(YŸ*CÏõÀî¥KoÎ.„,ÙEéD„k49
+±;‚õìsÏ‰½N"[ˆE#¶¹`š~‘%ÏÒ†iP;PHáÛ¨5p,GÇĞøm§‹‡"ép.•Îù£ßvñ
+…Á"²,C`‡c úåõ‚S+«+}¯æ~oÊt64!¾ûi[<rËAñX"•L¦&Z½ÀŞQòt¿ëœëºñx²ŸíCä·ÍıÍ}ÿ½ÑâØşæº!s‹«1ŞØk>}şÉíõ{.J ·ÃPÄµš­JR`>ÄuÛ­H<E¢P43:3Q¸rùBQ°½Wm—¦',EMÆKci$æqƒ9×=:ÁAÃ±¾ºèwëÇ0ôÁhûêışãQùmy¸‡Š¦>)6¿¥Ã}óÖ­P4‡Bö€ßjšŞnÖuË1ÌşÎvvlzv|!y8¶»·\ZšfØ3ã`g;Í4k»-Q_`£ À–—¡Wi‰ÉTŠe©­Ít2w¬Zî÷nøÍ³ì76}|<"¿ıâË_dñ7Å1±]]ßkŸZ]<óä9‚$w·6	>Üï/5úïÿì? ÏÀçÚı±>X6Ce¢Ñd¶Pb(ÂßA…Cw6në(ï—ÑZ6
+»[Û;‘w÷îİg_z…!QËvüÙÇ0$´[FCG–î·©„ßü4P†Ìo[M$AõğŸÑP<{2–l— Hğ²01á?·‰ø@«ã8îOˆÂˆş¯{ƒg:•Í-x¨ Æ&çŸúî$•&'!øàƒ·8šHõ-Øëú„ğQíË ®éıF€0Õo]šznß+¼?Şü°uéQÓ§ãÇz°E6hN:ğs­FôÈ]8(øĞ§8’§`;ô“Â#É‡ë*ŠÒw0š¢üw`ş­?-ûÕQçGµÑğıo¿vÀƒ‹@Ğo;,À°ñ(üF±D2ùkoø½Ä£ğÛc7:6$Œüâ‘ôÇ¯¥YÂñû‹GóO|ZÈG€‡! C †@><|xùğ0òàaä#ÀÃÈG€‡! C †@><|xùğ0òàaä#ÀÃğÿ ³³¿½©|£"    IEND®B`‚PK  niWG               layout-cachecd`d(g``àd``±…1f PK«iı      PK  niWG               content.xmlí\{Û¸ÿ¿ŸBõÅ]¿w7¶{»‡d½ Ù$Í9‡EaĞeó"‰:’^Ûè§éë'ézX/Ë¤¼›l.‚M4œùq8Î)®¾ÿaã{ÖfœĞà¼ÕïôZlê`qŞz7½iZ?\üá{êºÄÆ‡Ú+¢mÓ@À¿H|µ·V,˜PÄ	ŸÈÇ|"ì	qHM²ÜÕWDábëi‹+æ¬´À¡+,ys²h®ß³bÎJ;­u…%/5+îR]á÷Ú.«û!¤ ÅÆ#ÁûóÖRˆpÒí®×ëÎzØ¡lÑíÇã®jM¶S¾pÅ<ÅåØ]ìaÙïö;ınÂëctõ“¼Y•‚•?ÇLÛ4H Ò¬ò»…¶GÜ-ö˜Æ^"¦íŠ9?½CGz‡NVÖGb¹gNFİ[hT?n_î|ùº}IŞœ©lFBíaFÜYyJiªªˆ¨RwĞët£ç÷º–}ÍˆÀ,Ãn×²ÛÈ³S‹S¿ÊhÀ×ïGßI7M_‚ït£æ”™;{¡ÿ~ûò'{‰}´c&‡™Û$à;Ë09	{GzÚe8¤L¤†qõ&ÌÖ Õm)|oÿr—­	ë‚9N%+¨3ìÂÒ‡…×¾#xıM+Éëb\p‰(¦lÜ¬è÷º’']Æà"» Ïiré*€A@îŠˆ7!fD6!O‰MrY¯÷hÈ8wer`/‰é*a(mû
+'é|~`şFN.ê¸EÄB °9Š*˜¾íÊ¶¶L â2eÁ u‘Ô Qüàİ”àB-Ğv‘Û¶=~ñ}ËS²=K½Ï[·4 <DÒ{ l'L>ñ¶ù¶DH„¡Ô%ì´ºõèS°·^áµõ–ú(¨èãO(¤ü/¾ˆ˜ë5âo/p f† Æb¼’^wˆåÛT{l^…B	}×|M8?¦ë—+›8Èú	Üz¨îª¬¡‚WÃ:|ËöÑqŠ–TÆß’ZiÃ±½w÷¹kLG+	b·NêÇêgAW€D«~Úc¬jã9õÔa5b&¸[D^GVı³„k´ªJä‘¬4±¤¥o¦ûÃºtUju‘·òƒ‚R±¬[LU<íœöOìÔ®{í<Ã ?8}úçº>¿w]Á¨V×Ñ¨wÖDÕËPõìä¬NÕ~2f]¯î]×^g4zZ§ëğdĞHÕë0ëh8¬7ëxĞo¢ëÍƒèzz@×a#]ŸU¥¶=¯¨*²Šºt2Göû“Ô‡Âî×µíñ¸%[CäDÇ½No¬¼BŠPæ`Öö°+TÃi(,N=âXßôÔŸ,#‹%°4ÀY² áaÙ9Bî*ù’‘e@|´À;VÙÜ>y?ó¨ŸõÃºM‘Xë&2Õ×;ôË¯wèW_ïĞ¯¿Ş¡ß<¡b{@S¼)¥·1´`(\&@çÿê¡Iı$Pà æìl„7¢\©}Wv/¬¯Vib©•
+fN©ï¿l¨³ËHâ—Äİ¶9L,à®ÁÖç-y<³- “ä.ïº­òøKÇ ¤š×8ò9õœœ\ÔĞFœ `³<÷ğ&fĞ·ïğÓL{qØú
+|ÓyQœç-"ÀMìœå£ãyÙÛNLÌ¡?òÓÏ=rò–û‘Pä‡ädÔÕéU³ş€ÏÑ€‹Ë2 Ì—‡u•µ¼`(à‘nú¦Ê¯ë¿Ş–u?FĞ7÷ÓGdîØ38Yz*£ía‰7Íò oG<EªGõk0oÕ²ú³f®GÿŸ³ìœ=ÔjüÄ³:şBf5-=+Cãøú½ß…½G©¨ÿ‰vF©?3÷Î•…æ¶,Tæ¦¼ŸÓÃTQ¿«¨İÿL{'=äƒÇ:Ùgß•EN68¸^ï3‘WºiX­Æ/ÎÒıŞF›Lun6ôf?b$O¾öNhæDd<–¯iuND´í1{Í~£Íf:ğËè,?Â•?Í0Ó&/½a–9cœ8ç­^¯ïŒÜ>ú4V™–_åÁøêœø1î}¾„9-Ÿ«×Yú [éw\ÊÍµï<3õÇQßí=5è°”M;#*ŠR‡İ½w”â†9u¶éƒìÇR7İW’ºĞ+ZàöœaôË*k%¯))]á`wªLŒÂCmÛt%”‡zø{ r+jÆÿÂóVj8y{Râ(°irqë89Ç‚\Ew÷Õ¼ì·Z‰dcè›Aëbz}ûæå³éµuõúòİíõ«©uóú­õâÕÏ¯_\^ÇxaÄ0U¿ªŠ°‹é’pş¢Àz}5&X¦H`+¹Òj8– –º1'[À9ËŞIÙdcÖ–®˜eÃ4R˜, ğUz:Ú‚>µêSÇAİDå‹Û­Eyu5º…›˜ø/4ÈÚÃò°Ì,ÜK$¬5ñ<k-†ÁF6Œ~MÄ2t¦S>Ñèé´uáoÕïÛ™GÔ:·>ä)Ma$-#)Æ0Èqæ<Á~#aÆ ‚®ƒ<Š¤ÃØ°[l›GŠ‰MÁfò’k%¢j1†åB.±"5ªĞnG7†—°éÉ£)’1‹6y ƒ`/£HÆ@k<ÏÃ ÁdXÙÖ1ÑÜ·P(ßõå½*¢cı²bÄ!6òäÄ¯x³ĞfŒM(HÜ~~Ğ1±!Ø 
+lĞlX6lvRvÒì´
+ì´!ØYØ™1ØÑ¯ŞåáR²y>¢ÅP&)š0NÅpV[0<m]\&ÅÈ¬ÂCl‹|]RU.—T,Ál‡
+›2ı[wÈ[Aÿ­âŸc±Æ8°>|üÎÒ,Šù¾A¶¯ÈõÍ2}!Ï›gùboá+ò{³ì¾/·‘ÙKy½IV¯Îé3z)Ÿ7Éæ…\nÉKy¼I/äpó^‘¿›eïÔGâ€SòİtÚãXUšøİTË¨šÈ)hT`ì)!²€Íª‹ŠÚ¢YeQQW4«**jŠfEE=Ñ¬š¨¨%šUuD³*¢²†hTAœeòÍ‡Lİê şûïÿh$ç	ùc®®ÎYï8f¦õÃXVH+œyˆ‹İ–=GÒåÈ%¬„”ÒÌ <º AV!ùl‘Ù—íu ú½û©ú®¦üõüYÂ}yE#UŠÃ²–S“>h.ï˜Ÿa7#Ofâœ®˜g$¸£şÍ£•uKsl^É”l˜dØ`B6tâ
+0óh0óˆOD&"~´ÌÑlwÒ‰‹€	½‚à¨Ä©İµ˜Á
+
+uÉl™uBjé¨„4­õ´Œ5“õoí±4¬şRo³M:]êpúÛÍAÂ³–†<rPPÌã’ïß¬Aï‰5êœÊ-ğig<Î"~×À–BØ%[­É´8„«ıUÕDgÚÌ C´•o'f~\:W›¦;±}mÍ f~ª$7Ü§kÚf-K±YÈÈ]>¦eÉæ€ 3 äAÈr¶r`8›ãrtÓ ¥K .(…s) C×„tÆ3Ù"qÒÍjV¯*ªyVß:j]¼$z­lE£4,k–t-_BÅg!ÆĞ6zèå1¡|‰ó;…/·Ãv¡òµ6åÈ{b©_HƒF,lôwëteù¿-•‘pô²Mõ 5ÔM™•(p,WÖPDD¥“K=Êw¯ªÈÒ¬“şùÇvÛz~ı×¯,F×híö¿ô¤£Fæİ‹Rtæ®<ÏÁ\7"–äa%1ıÅT_éÃ•$º®]M£uó3Ó	T‚Ú!¼fjß ™ÏúıØy®_]»ÎßÕ¬¾õ¢~Æß}ÉÜuP_”‰¨¹ôŸ´åÄãFÔğwzÔyn.ri.re.rm.rSYB‘¿fK×<ß ”8†TgÙşîYrO×ÛÚ¹`Ñ=Èı^ .:›]áèZPEÏf;ÏêUø¤JıŒÄ[Yá?…Ş½y<ºüMl2WIl¾?nÓh*+ü§Ê‘ÔšËQîqyšælñ°·8ÒôÏQv_q¤N—Çë”«ZTçêxuò¥Ğ‘ú\¯OM}uìR>^9“¢-]25%“q,¨=ï¯«²zpú@Ç7°YŠnHÃ'9 Fwˆxq¹·€MÇØ¢Üc±t×´¡9]É›šr¯“½ÅÉ%ÿš¼':›Ÿ~2~d©ï>OâÉ'R­VL[2ìî>
+È‡zd;2õ-P8xÓ	—a÷Rí×f(˜B³DİY¢Ù›œƒÖÅñ}d·âÿ£Ì\v37wOÑeèä©øÍò‹ÿPKá>yiÀ  ô\  PK  niWG               settings.xml½ZßsÚ8~¿¿"Ã{¤ù“¤cHiÓĞÀ iæú&ìtÈZ$øïo%MÁ\©A÷”‰-ïJ»ßî~»âöã<'o 4GyWªUJ' CŒ¸ß•^­Ó›ÒÇû¿nq4â!Ô#Ó¤9Õ`-Ñ'ô¹Ôõìõ])U²Ls]—,]7a«ÏêïW×²ìÉ\p9½+MŒIêåòl6;›}8C5.WkµZÙ½]-Qøx_UÙê÷ªq­È~mÆ);¯T.ÊÙÿ¥“å&ß™æ¼t¿²Ãêø÷·KÙŸSn ¶¶9Y>¶[»+‘Êú‡ÙÚj¥¼ï~ıæ;­°&¥Õ³Hè@9.İ_Vn*·åm)ûKnÃÈäŠ>Pî+Ì$WğEíúâÃaÂ¿ Oò·}^­Tn½?ÁY"‚4'LAoh"
+`²t?bBC1%²¡p¦áFpñ§1KN¹Œ`Ñ¶µòAæ¾¡ğP‹ılşmlUÅ­µ-Ï‹ûr'øÎk—7µârw…Kõü¢R×š?\œXñí÷vŠÃÂ®s²hÆùş»ªÜÜş1¨MÄMP™ƒ²R›-05Mi,7#ûXÒˆÓ£Eö¶]Z,4¨ò÷^-ŠìGİ¡¨¥èA­ç<|Ÿav½^&­üT$÷/«ÙƒT1CEúOêk—Ò˜i±ùóöÁ—)®¼§@J4Nÿƒ—“ßD2&Š%É¨´ °œø.Cƒ…Ó±ÂTnfûc)qÉÈjòv
+…:!({?'¿Oˆğ‡>˜Óğ)NÌÂ“‰‚$$[±±bÉäSÓª˜™>§ñÜ¬vˆ>“º1—ä¢­Gı…¦-Šq*|	ÿuÖ5ÖTŠÍ\ş:¾²9$ú<eT½×>÷¡géô‘À™éı˜	Ñd‰î‚
+©ÈP¸\]yJ)¿sFqñÄD\È7Aëÿã«éiõ7s"8ÃåÌë¢XšSşá(ü47m`‘ŸÒ<	4µdŠè¨@†TN!zU´TµÄÂÑ(¶Šˆº<4©ò¢áŸÑ’­|‹´Îğİ‘6ÿ{PÖFõÈK(ÅÂGg;–äŠ|È¨!˜œjÂGÛvÓL„©päÈ—{@¬ÏP`Œ²z)½ÙŒíKß×T>ZØÓéWn¨šÊ”‰†M®¾¨™4œúªB/, 5€¹y%~xcºoÔô>R°ÛG0ÈÓ~ÂB:Æ ¶àÙë!;Ù=œ=löğGrLGD D¢€š’Ğ«ÿ-¢—vóãşÀØJæyR¹æ£úQ¶¹ö° â,HÌ½Édâø0Èüä“H¨©Ì‚’Lü¦Ö?EK 3ÆÑCŒc÷¶~ªá]åÇç|T$İfCËË _‰¹öz vvÍ×ÔWÚØÀÌ¢æQú„Ù:¡Vº‹šÛÂíG™³ŸË ¾F ¬Ñì•Y.Òí˜eOøxrJ4Ej\Úì¾g—EÙ¨}¹&ÅæQ¤2MŒc¶5´Ù~µ!ÎşícªÂâ±Njì-J›CüÍADÚ'b›(©ÇùI]:’ K¸ıß,Ÿ3®víUÁyßòª«ĞP ’`‹¯“ò«‹—L-öqˆmsÀÚ‡ëêuÁIı/#·Ş í+?€êƒI·ÈÕš |,)Õô&«¤æ#ç8§Ùêåò*i "´û#iKöìÒòRK`ú†)L}İÕS(%”|mâ<úí|R]S6n½uïíåmJŸ€j)ŒsâùÜa‚ÔàK1³³v@0m5ğ©ÀÙé¨ÜÛzà…U>	4g²›ÊĞ¤¾9¢Ct©ó‡	
+Šz_j>Ûì?ZËâé›±»g|€K…—ş.Ên.;£‘?ÓVxˆá¸ß˜™4¨¦ÙÒïj•Ï–ÔA7Ô‹L3›ì¾ì¬°=;!ğt	f	úgC¶níaŠ€fç­uyëçaå]?œ»ÿPKxftì  z'  PK  niWG               meta.xml“Moœ0†ïùˆæ
+Æ|lÁb‰ÔCÕCªVêVêmåµ'¬[°‘mBúïk>CV9ôèw™ygl—/mã=ƒ6BÉ£ÃÈ÷@2Å…¬şÏÓç ÷ª»R==	„+Ö· mĞ‚¥K•†Ì¡£ßkI5ÂI[0Ä2¢:k
+ÙÓdj4+/şÕÚ 4C8$¡Ò5ÂEQ )º¢œm\×ëf¢8CĞÀØÁ b´²£Ãÿ55²{KJ©­ÑˆÏ¦§vq¥h>¯t­9oŞÀ±	r©¥Á³€áƒï-ãïûÕºİÑFuç•œ—Uá,ÀQ''œŒIœ‡	NÓC†‹¼D+VNöë.-à½¦ÖÕ®¾Ÿ²/Iñ'?Jô>ñ6‘ıe˜*+nğEŸá$¸l¥«GqÑğm2Ò0ó0¾²9ÿÊçCêí€s§Õo`¥qÔF÷ŸzÑğ ^ú¼–gæò´×î‚¼iÌUœ=lĞX7‡±‚y“né¥€©^Z·XEKëMŒQ]F7·j·#“MÓ´Ö´»nuña	JóUM£|QÙÕe0ú5TdKL*WaÁt”¹V·hò±È}T•hÿ¶Ó›¿WıPK*'’Ê  ¹  PK  niWG            
+   styles.xmlíZKã6¾ï¯0ìŞhÉv?lg<Áb} ™ÈôœZ¢lîP¢@Òm{~}Š¤(Q2åÖL§ÄHÁ4ëÉ¯ŠUEÊï~8lòL„¤¼ÜD³iMH™òŒ–»MôééßhığşoïxÓ”¬3
+R*$Õ™9áR®-qD¹æXR¹.qAäZ¥k^‘Ò	­}îµ1eWŒ²±â†Ù—Vä¤Æ
+kŞ,Ş·l˜}éLàãXaÍ˜úâ9+|’å¥¼¨°¢=/NŒ–Ÿ7Ñ^©jÇÇãqz\L¹ØÅ³ÕjjãpÚğUÁW–Æ„mLÆ³é,v¼Qx¬š×w©<["FCƒ¾ˆª|ŞÎˆçİ 4é‹Ñ¹a˜»á]dãÃ»È|Ù«ı@L–ñ šÿ}ø±ÍQŒµ¥y;P¥‚V£·i¹}yÎyãª°Ô¸;O’»Øşíq¯²UDxìéUö³´Aœ!Ğ€o"Ï:M·Ğ›Ô|Rq¡Gòñ
+Ğ™7Çk¯
+6|¼4Õ±îD–YÁEG=Srü.êTÎëXõ`ÊĞK"†É¯SWfI¬yšc!i‹ªØ5e?ç‡6­¢œ*"¨&afÄÖ~–1ş*ë^áièo)*„÷Ó/±¦!]î¡ ÕZ¼.7Ş»––shg9N	ÊHÊäûw¶5Ëû·vn}à%—ÖÁ€ªã˜
+ÊÎ]Z«¢¢*…JÓÉ¢øºö'Ø¶œüD“_xË€àŠËï{|v±cÕò£)K8¢Öwá×3Ô¤Ê®ıØXÀ!·>lZ©”¯1ıã!¥|Ä¥œ|*)Ì&!ô-ŞèÈ³T¤xOxÜj¯µ¥k½n2çeFr|`õ˜æ4×.í®ö4oı7ªÔ¡(¤–Ş†T‚&ĞX‡Nş]bş‹&ºN¬sÊXCY­Ò4Ï£IÎ×GP…x¥Ì)+9Ò×"r3~Dà­$
+6Q2]¤ExîôecAúxÁ…ö\Ğ/\WÍ:_^e~Ö›J/Y¡îÕzÁĞYƒÌ`GªöÈ¥J¼ä©°ÀîØ†¤Ù>([B6Í·¬˜Uû&ƒŒ[A0L|!š*GÑmW»V@Îo"&ÚvrŠ–Ñ½NOïş^ 6a&I“Ğ9 mx%uÒ»İ°k¿½İ@ôSÆsb Î!KúÈ³y¥ÌÃåî€w°D,S
+ÍB	ÈO/Ô"èë¸*-¯¶áx­¥ÙÚ˜£‘¦^ÖV!d[ŸŒœ‚çİl‚&ê¥Ñ†fÛˆtÎ÷˜Cß„0úır±:”©:˜ŞmN:tbØ¤Ô×&k´‡ä¯ŒúSd”0½ªÁˆ5{YŞr‘aÂµRt:ğ¯6Œ?öŒÃJ/m>R!ÅwDíõmTgôK†}ƒ6µ>*ªÈ¢ÁåğeXJpÒ·MæK}ÿ%8Ó×£´ÁBóÎ‚ÂÔÁÀ×µyö°—rSû¥+ú–bÎ©»³'— ¿à\ä’ÚV¿œŞ­–mTç
+ÜMÁØhü¢ôìa
+W©¾¸ »½òÂåysµ-ÅğÃQx‚}ÿ:O~İòìììfTVŸQË1ñÉ¿C¨Ln\dmQÈ[(¨‰F¥]Ûr¥ô†Ù¼,…¢ š˜õ›z<}„4 ÿÒºÌ%;Šf›ôy¾™ğãy$<c Ñr[œ~Ş	}uÓ,xPJëvôÚcÓd¾g†P¿y²ò[ZR©o¯®>^‡E·ÇòUÁÊ¢¯Š°?İ•M©Õüÿ ÍÏ A¹£Gè.İŒÖµiÃ |$ºşl¢-gY§ùZ‚kİCä¦É†ÑqúŸŞmIÌ	±·¡89®‰ÏÒ´G¿Æ¼0K-“ŞTôåtêE%/›aÇ(ƒ$&ÂŞô"4uÎh6Àr¤™~57ÌQ{c 3ÿŒgÁéÉwñrş	È54#9:6ÿ±÷ä‹ª7â>m2—)Ü0‘ínşi‚ËöÉ-ø÷¹SÀì`íïÑİ=tP7¯.B[çµ½ŞZÉîÑò¨=ñ€ÌnøAµYĞÁégK‰zŒŒ<V³Û© 9àp"ı´áÔ5`2*U-ÚÇÓ'Õ³‚®kê<q×`¼²©%úE1¤¶ÇRë6‹9gp'ÚBL´”öÈ3î*=jg™dúø0¯»’IujnÜ›ù”º_1’«V¤Å9¸i á9éùM!=›&³‡ Ò>¥ƒ´#¼9Ò‹Czş8 tCèálÖßæ»ƒù~~7€sKém	oôı!ıø¸@º¥ô¶„7Gúá¦O“E¸ú”ÒğæH?ŞÒóe¸ú”Ò–ğæH/oéûp™ö=œïÿ"½º1˜WC8·”Ğ–ğæHÏ’›‚z1MîÂıĞ§t v„×@İ%ùø—\	÷ô2§»ƒ0_˜&ÕI9çJÿ
+Å¬Ş±ıüŒÙèW»è¥ùåËØ§"ıJës¿VÑûï!)³!iØA§^#Òz23øĞe?¢ëkåÿ¨B§VÒ¢ c[Óh™
+ó«@=üy¿?0ÚÚŸè§ĞISäîmoÑÆgˆn÷4U1‹L½G*C©_æ‰û<àûúmn¾š>\Ùcm TˆªQT›%0UQÿ=¹7¸÷äğœÒ]µKşËÍ•ò6QOÍnô£Oû+“šA÷½¤F#;¬÷©%ƒS‡K([;7üšg–Ì<8Wî‹ÿ ç¿5áL?¹Ú4°Éa×œbû¿·lÏ´ş3w(Ğn³{óEÌš}¼ÅKEmJ^æ`M(°lt4ÖêE­éêw>ßg/w½£ĞS‡#ış7PKdüvz  c-  PK  niWG               manifest.rdfÍ“Ánƒ0Dï|…eÎ` —‚9å\µ_à“X/ò.%ü}]'ª¢ª*Í¡Ç]fŞhåÍö8ìC;4`k§gÚ*èŒİ×|¦>yäÛ&Ú¸®¯^Úój‹•Ÿj~ š*!–eI—‡Ü^äeYŠ¬E‘xE‚«%yL,Æ¼‰­FåÌD>}Íòfªyœ%´N:¼90;¥¿£:P˜‚Dƒ	LÚ†L‹úŞ(-ò´£&)¦÷}Ü‚šGm‰‹-®²Ëc1«Ÿ¥£su¿¹…‡_5R`Éã¥Şô¿""­ƒÆ?^v¼ç}¡ëã§“÷ÎúFº‹z÷†{Ö?²VşG5Ñ'PKı=«¹   ƒ  PK    niWG               Configurations2/toolbar/PK    niWG               Configurations2/menubar/PK    niWG               Configurations2/floater/PK  niWG            '   Configurations2/accelerator/current.xml PK           PK    niWG               Configurations2/images/Bitmaps/PK    niWG               Configurations2/statusbar/PK    niWG               Configurations2/toolpanel/PK    niWG               Configurations2/progressbar/PK    niWG               Configurations2/popupmenu/PK  niWG               META-INF/manifest.xmlµTKnÃ İçÛÊĞfU¡8YTê	ÒLğØA‚Á‚!Šo_Ûj>U•*VÓİ|ß{Ì «ÍÑ»â€1Ù@•x‘Ï¢@2¡¶ÔVâcû^¾ŠÍz±ò@¶ÁÄúdC¥³[‰IH6iI³Ñ¡CªƒÉ‰õ÷z=1½+K±^¾Æ:,‡şØ_ª›ì\Ùï+¡n\Âk%÷VºÎY<”©Õr,¯uJÆ#5GÃvŸıÀº¤ødÊÚ¬‡Õ˜ŸÅâ ™Kfwœng	b?ÂâqÃªn0ŒÃQcznBæá>¥‡{dx¼ZîşƒÖ¯˜ŒusÇş†ª§ÙoÛæ8A¤¥cĞáà†¨Lñ÷åşëÎ—2d¶Ò\#Œä+õã›YPK›ßwµ,  ¡  PK     niWG^Æ2'   '                    mimetypePK     niWGqî©Hl  Hl               M   Thumbnails/thumbnail.pngPK   niWG«iı                   Ël  layout-cachePK   niWGá>yiÀ  ô\               m  content.xmlPK   niWGxftì  z'               z  settings.xmlPK   niWG*'’Ê  ¹               9€  meta.xmlPK   niWGdüvz  c-  
+             9‚  styles.xmlPK   niWGı=«¹   ƒ               ëŠ  manifest.rdfPK     niWG                         %Œ  Configurations2/toolbar/PK     niWG                         [Œ  Configurations2/menubar/PK     niWG                         ‘Œ  Configurations2/floater/PK   niWG           '             ÇŒ  Configurations2/accelerator/current.xmlPK     niWG                           Configurations2/images/Bitmaps/PK     niWG                         [  Configurations2/statusbar/PK     niWG                         “  Configurations2/toolpanel/PK     niWG                         Ë  Configurations2/progressbar/PK     niWG                           Configurations2/popupmenu/PK   niWG›ßwµ,  ¡               =  META-INF/manifest.xmlPK      ª  ¬                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        # Dolibarr language file - Source file is en_US - banks
+Bank=Banka
+Banks=Banky
+MenuBankCash=Banka / Peniaze
+MenuSetupBank=Banka / Peniaze nastavenie
+BankName=NÃ¡zov banky
+FinancialAccount=ÃšÄet
+FinancialAccounts=ÃšÄty
+BankAccount=BankovÃ½ ÃºÄet
+BankAccounts=BankovÃ© ÃºÄty
+ShowAccount=Show Account
+AccountRef=FinanÄnÃ½ ÃºÄet ref
+AccountLabel=FinanÄnÃ½ ÃºÄet Å¡tÃ­tok
+CashAccount=PokladniÄnÃ© ÃºÄet
+CashAccounts=HotovostnÃ© ÃºÄty
+MainAccount=HlavnÃ½ ÃºÄet
+CurrentAccount=BeÅ¾nÃ½ ÃºÄet
+CurrentAccounts=BeÅ¾nÃ© ÃºÄty
+SavingAccount=SporiteÄ¾nÃ© ÃºÄet
+SavingAccounts=Sporiace ÃºÄty
+ErrorBankLabelAlreadyExists=FinanÄnÃ½ ÃºÄet Å¡tÃ­tok uÅ¾ existuje
+BankBalance=Zostatok
+BankBalanceBefore=Zostatok pred
+BankBalanceAfter=Zostatok po
+BalanceMinimalAllowed=MinimÃ¡lny zostatok povolenÃ¡
+BalanceMinimalDesired=MinimÃ¡lny poÅ¾adovanÃ½ zostatok
+InitialBankBalance=PoÄiatoÄnÃ½ zostatok
+EndBankBalance=Koniec zostatok
+CurrentBalance=BeÅ¾nÃ½ zostatok
+FutureBalance=BudÃºce rovnovÃ¡ha
+ShowAllTimeBalance=ZobraziÅ¥ rovnovÃ¡hy od zaÄiatku
+AllTime=From start
+Reconciliation=Zmierenie
+RIB=ÄŒÃ­slo bankovÃ©ho ÃºÄtu
+IBAN=IBAN
+IbanValid=IBAN is Valid
+IbanNotValid=IBAN is Not Valid
+BIC=BIC / SWIFT ÄÃ­slo
+SwiftValid=BIC/SWIFT is Valid
+SwiftNotValid=BIC/SWIFT is Not Valid
+StandingOrders=TrvalÃ© prÃ­kazy
+StandingOrder=TrvalÃ½ prÃ­kaz
+Withdrawals=VÃ½bery
+Withdrawal=OdÅˆatie
+AccountStatement=VÃ½pis z ÃºÄtu
+AccountStatementShort=VyhlÃ¡senie
+AccountStatements=VÃ½pisy z ÃºÄtov
+LastAccountStatements=PoslednÃ½ vÃ½pis z ÃºÄtu
+Rapprochement=Reconciliate
+IOMonthlyReporting=MesaÄnÃ½ reporting
+BankAccountDomiciliation=ÃšÄtovnÃ© adresa
+BankAccountCountry=ÃšÄet krajiny
+BankAccountOwner=MajiteÄ¾ ÃºÄtu NÃ¡zov
+BankAccountOwnerAddress=MajiteÄ¾ ÃºÄtu adresa
+RIBControlError=Kontrola integrity hodnÃ´t zlyhÃ¡. To znamenÃ¡, Å¾e informÃ¡cie v tomto ÄÃ­sle ÃºÄtu nie sÃº ÃºplnÃ© alebo zle (zistiÅ¥ krajinu, ÄÃ­sla a IBAN).
+CreateAccount=VytvoriÅ¥ ÃºÄet
+NewAccount=NovÃ½ ÃºÄet
+NewBankAccount=NovÃ½ bankovÃ½ ÃºÄet
+NewFinancialAccount=NovÃ½ finanÄnÃ½ ÃºÄet
+MenuNewFinancialAccount=NovÃ½ finanÄnÃ½ ÃºÄet
+NewCurrentAccount=NovÃ½ beÅ¾nÃ©ho ÃºÄtu
+NewSavingAccount=NovÃ½ sporiaci ÃºÄet
+NewCashAccount=NovÃ½ peÅˆaÅ¾nÃ½ ÃºÄet
+EditFinancialAccount=UpraviÅ¥ ÃºÄet
+AccountSetup=FinanÄnÃ© ÃºÄty pre nastavenie
+SearchBankMovement=HÄ¾adaÅ¥ banka hnutia
+Debts=PohÄ¾adÃ¡vky
+LabelBankCashAccount=Banka alebo peÅˆaÅ¾nÃ© Å¡tÃ­tok
+AccountType=Typ ÃºÄtu
+BankType0=SporiteÄ¾nÃ© ÃºÄet
+BankType1=PrÃºdu alebo ÃºÄtu ku kreditnej karte
+BankType2=PokladniÄnÃ© ÃºÄet
+IfBankAccount=Ak bankovÃ½ ÃºÄet
+AccountsArea=ÃšÄty oblasÅ¥
+AccountCard=ÃšÄet karta
+DeleteAccount=ZmazaÅ¥ ÃºÄet
+ConfirmDeleteAccount=Ste si istÃ­, Å¾e chcete zmazaÅ¥ tento ÃºÄet?
+Account=ÃšÄet
+ByCategories=PodÄ¾a kategÃ³rie
+ByRubriques=PodÄ¾a kategÃ³rie
+BankTransactionByCategories=BankovÃ© transakcie podÄ¾a kategÃ³riÃ­
+BankTransactionForCategory=BankovÃ© transakcie pre kategÃ³rie <b>%s</b>
+RemoveFromRubrique=OdstrÃ¡Åˆte spojenÃ­ s kategÃ³riou
+RemoveFromRubriqueConfirm=Ste si istÃ­, Å¾e chcete odstrÃ¡niÅ¥ vÃ¤zbu medzi transakcie a kategÃ³rie?
+ListBankTransactions=PrehÄ¾ad bankovÃ½ch transakciÃ­
+IdTransaction=ID transakcie
+BankTransactions=BankovÃ© transakcie
+SearchTransaction=HÄ¾adaÅ¥ transakcie
+ListTransactions=Zoznam transakciÃ­
+ListTransactionsByCategory=Zoznam transakciÃ­ / kategÃ³rie
+TransactionsToConciliate=Transakcie zmieriÅ¥
+Conciliable=MÃ´Å¾e byÅ¥ porovnanÃ¡
+Conciliate=ZmieriÅ¥
+Conciliation=Zmierenie
+ConciliationForAccount=Zmierte sa tento ÃºÄet
+IncludeClosedAccount=ZahrnÃºÅ¥ uzatvorenÃ½ch ÃºÄtov
+OnlyOpenedAccount=Only open accounts
+AccountToCredit=ÃšÄet na Ãºver
+AccountToDebit=ÃšÄet na vrub
+DisableConciliation=ZakÃ¡zaÅ¥ zmierenie funkciu pre tento ÃºÄet
+ConciliationDisabled=OdsÃºhlasenie funkcia vypnutÃ¡
+StatusAccountOpened=Open
+StatusAccountClosed=ZatvorenÃ©
+AccountIdShort=ÄŒÃ­slo
+EditBankRecord=UpraviÅ¥ zÃ¡znam
+LineRecord=Transakcie
+AddBankRecord=PridaÅ¥ obchod
+AddBankRecordLong=PridaÅ¥ obchod ruÄne
+ConciliatedBy=OdsÃºhlasenÃ©
+DateConciliating=SynchronizovaÅ¥ dÃ¡ta
+BankLineConciliated=Transakcie zmieril
+CustomerInvoicePayment=KlientskÃ¡ platba
+CustomerInvoicePaymentBack=KlientskÃ¡ platba spÃ¤Å¥
+SupplierInvoicePayment=DodÃ¡vateÄ¾ platba
+WithdrawalPayment=OdstÃºpenie platba
+SocialContributionPayment=Social/fiscal tax payment
+FinancialAccountJournal=FinanÄnÃ½ ÃºÄet Äasopis
+BankTransfer=BankovÃ½ prevod
+BankTransfers=BankovÃ© prevody
+TransferDesc=Prenos z jednÃ©ho ÃºÄtu na inÃ½, bude Dolibarr pÃ­saÅ¥ dva zÃ¡znamy (debetnej v zdrojovom ÃºÄte a Ãºver v cieÄ¾ovom ÃºÄte, v rovnakej vÃ½Å¡ke. RovnakÃ© oznaÄenie a dÃ¡tum bude pouÅ¾itÃ½ pre tÃºto transakciu)
+TransferFrom=Z
+TransferTo=Na
+TransferFromToDone=Transfer z <b>%s</b> na <b>%s</b> %s <b>%s</b> zo bol zaznamenanÃ½.
+CheckTransmitter=VysielaÄ
+ValidateCheckReceipt=Overenie tohto polÃ­Äka prÃ­jem?
+ConfirmValidateCheckReceipt=Ste si istÃ­, Å¾e chcete overiÅ¥ zaÄiarknutie tohto potvrdenia, nebude moÅ¾nÃ© meniÅ¥ akonÃ¡hle sa tak stane?
+DeleteCheckReceipt=OdstrÃ¡Åˆte zaÄiarknutie tohto prÃ­jmu?
+ConfirmDeleteCheckReceipt=Ste si istÃ­, Å¾e chcete zmazaÅ¥ toto polÃ­Äko prÃ­jem?
+BankChecks=BankovÃ© Å¡eky
+BankChecksToReceipt=Kontroly ÄakajÃº na uloÅ¾enie
+ShowCheckReceipt=ZobraziÅ¥ skontrolovaÅ¥ depozitnÃ© potvrdenie
+NumberOfCheques=Nb Å¡eku
+DeleteTransaction=OdstrÃ¡niÅ¥ transakcie
+ConfirmDeleteTransaction=Ste si istÃ­, Å¾e chcete zmazaÅ¥ tÃºto transakciu?
+ThisWillAlsoDeleteBankRecord=To bude tieÅ¾ odstrÃ¡niÅ¥ vznikajÃºce bankovÃ© transakcie
+BankMovements=Pohyby
+CashBudget=PeÅˆaÅ¾nÃ© rozpoÄet
+PlannedTransactions=PlÃ¡novanÃ© transakcie
+Graph=Grafika
+ExportDataset_banque_1=BankovÃ© transakcie a vÃ½pis z ÃºÄtu
+ExportDataset_banque_2=Deposit slip
+TransactionOnTheOtherAccount=Transakcie na inÃ½ ÃºÄet
+TransactionWithOtherAccount=Prevodom na ÃºÄet
+PaymentNumberUpdateSucceeded=Platba ÄÃ­slo aktualizovanÃ© ÃºspeÅ¡ne
+PaymentNumberUpdateFailed=Platba ÄÃ­slo nemoÅ¾no aktualizovaÅ¥
+PaymentDateUpdateSucceeded=DÃ¡tum platby aktualizovaÅ¥ ÃºspeÅ¡ne
+PaymentDateUpdateFailed=DÃ¡tum platby nemoÅ¾no aktualizovaÅ¥
+Transactions=Transakcie
+BankTransactionLine=BankovÃ© transakcie
+AllAccounts=VÅ¡etky bankovÃ© / peÅˆaÅ¾nÃ© ÃºÄty
+BackToAccount=SpÃ¤Å¥ na ÃºÄte
+ShowAllAccounts=ZobraziÅ¥ pre vÅ¡etky ÃºÄty
+FutureTransaction=Transakcie v Futur. Å½iadny spÃ´sob, ako sa zmieriÅ¥.
+SelectChequeTransactionAndGenerate=VÃ½ber / filter, aby kontroly zahÅ•Åˆali do obdrÅ¾anÃ­ Å¡eku vkladov a kliknite na &quot;VytvoriÅ¥&quot;.
+InputReceiptNumber=Choose the bank statement related with the conciliation. Use a sortable numeric value: YYYYMM or YYYYMMDD
+EventualyAddCategory=Nakoniec urÄiÅ¥ kategÃ³riu, v ktorej chcete klasifikovaÅ¥ zÃ¡znamy
+ToConciliate=ZmieriÅ¥?
+ThenCheckLinesAndConciliate=Potom skontrolujte, Äi riadky, ktorÃ© sÃº vo vÃ½pise z ÃºÄtu a potom kliknite na tlaÄidlo
+BankDashboard=ÃšÄty zhrnutie
+DefaultRIB=Default BAN
+AllRIB=All BAN
+LabelRIB=BAN Label
+NoBANRecord=No BAN record
+DeleteARib=Delete BAN record
+ConfirmDeleteRib=Are you sure you want to delete this BAN record ?
+StartDate=Start date
+EndDate=End date
+RejectCheck=Check returned
+ConfirmRejectCheck=Are you sure you want to mark this check as rejected ?
+RejectCheckDate=Date the check was returned
+CheckRejected=Check returned
+CheckRejectedAndInvoicesReopened=Check returned and invoices reopened
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               # Dolibarr language file - Source file is en_US - suppliers
+Suppliers=LeverantÃ¶rer
+AddSupplier=Skapa en leverantÃ¶r
+SupplierRemoved=LeverantÃ¶r bort
+SuppliersInvoice=LeverantÃ¶rer faktura
+NewSupplier=Ny leverantÃ¶r
+History=Historia
+ListOfSuppliers=Lista Ã¶ver leverantÃ¶rer
+ShowSupplier=Visa leverantÃ¶r
+OrderDate=BestÃ¤ll datum
+BuyingPrice=BETALKURS
+BuyingPriceMin=LÃ¤gsta kÃ¶pkurs
+BuyingPriceMinShort=Min kÃ¶pkurs
+TotalBuyingPriceMin=Totalt subprodukter kÃ¶per priserna
+SomeSubProductHaveNoPrices=Vissa under produkter har inget pris definierat
+AddSupplierPrice=LÃ¤gg leverantÃ¶r pris
+ChangeSupplierPrice=Byta leverantÃ¶r pris
+ErrorQtyTooLowForThisSupplier=Kvantitet fÃ¶r lÃ¥g fÃ¶r denna leverantÃ¶r eller nÃ¥got pris som anges pÃ¥ denna produkt fÃ¶r denna leverantÃ¶r
+ErrorSupplierCountryIsNotDefined=Land fÃ¶r denna leverantÃ¶r Ã¤r inte definierat. Korrigera detta fÃ¶rst.
+ProductHasAlreadyReferenceInThisSupplier=Denna produkt har redan en referens i denna leverantÃ¶r
+ReferenceSupplierIsAlreadyAssociatedWithAProduct=Denna hÃ¤nvisning leverantÃ¶r Ã¤r redan kopplad till en referens: %s
+NoRecordedSuppliers=Inga leverantÃ¶rer registreras
+SupplierPayment=LeverantÃ¶r betalning
+SuppliersArea=LeverantÃ¶rer omrÃ¥de
+RefSupplierShort=Ref. leverantÃ¶r
+Availability=TillgÃ¤nglighet
+ExportDataset_fournisseur_1=LeverantÃ¶rsfakturor listan och fakturornas linjer
+ExportDataset_fournisseur_2=LeverantÃ¶rsfakturor och betalningar
+ExportDataset_fournisseur_3=LeverantÃ¶rs order och orderrader
+ApproveThisOrder=GodkÃ¤nna denna ordning
+ConfirmApproveThisOrder=Ã„r du sÃ¤ker pÃ¥ att du vill godkÃ¤nna att <b>%s?</b>
+DenyingThisOrder=Deny this order
+ConfirmDenyingThisOrder=Ã„r du sÃ¤ker pÃ¥ att du vill fÃ¶rneka detta syfte <b>%s?</b>
+ConfirmCancelThisOrder=Ã„r du sÃ¤ker pÃ¥ att du vill avbryta denna order <b>%s?</b>
+AddCustomerOrder=Skapa kundorder
+AddCustomerInvoice=Skapa kundfaktura
+AddSupplierOrder=Skapa leverantÃ¶r fÃ¶r
+AddSupplierInvoice=Skapa leverantÃ¶rsfaktura
+ListOfSupplierProductForSupplier=FÃ¶rteckning Ã¶ver produkter och priser fÃ¶r leverantÃ¶r <b>%s</b>
+NoneOrBatchFileNeverRan=Ingen eller parti <b>%s</b> sprang inte nyligen
+SentToSuppliers=Skickas till leverantÃ¶rer
+ListOfSupplierOrders=Lista Ã¶ver leverantÃ¶rsorder
+MenuOrdersSupplierToBill=LeverantÃ¶rs order att fakturera
+NbDaysToDelivery=LeveransfÃ¶rsening, dagar
+DescNbDaysToDelivery=The biggest deliver delay of the products from this order
+UseDoubleApproval=Use double approval when amount (without tax) is higher than (The second approval can be done by any user with the dedicated permission. Set to 0 for no double approval)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         # Dolibarr language file - Source file is en_US - users
+SALARIES_ACCOUNTING_ACCOUNT_PAYMENT=Accountancy code for salaries payments
+SALARIES_ACCOUNTING_ACCOUNT_CHARGE=Accountancy code for financial charge
+Salary=Salary
+Salaries=Salaries
+Employee=Employee
+NewSalaryPayment=New salary payment
+SalaryPayment=Salary payment
+SalariesPayments=Salaries payments
+ShowSalaryPayment=Show salary payment
+THM=Average hourly price
+TJM=Average daily price
+CurrentSalary=Current salary
+THMDescription=This value may be used to calculate cost of time consumed on a project entered by users if module project is used
+TJMDescription=This value is currently as information only and is not used for any calculation
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ÿØÿà JFIF  ` `  ÿáY´Exif  MM *    	      †    5         1      Ä2      Ì       ‚˜      à‡i      ğê      z    ê                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         SAMSUNG SAMSUNG ES70, ES71 / VLUU ES70, ES71 / SAMSUNG SL600  1002051 2016:01:08 12:05:09 COPYRIGHT, 2010  '‚š      Ö‚      Şˆ"       ˆ'     È       0220      æ      ú‘     ‘      ’      ’      ’      &’      .’       ’        ’	       ’
+      6’|   FP  >’‘    00  ’’    00        0100                       ¸       Y¢      Yœ¢     Ë£     M 4£    ÔÊ1¤      Ò¤        ¤      Y¤¤       ¤      @ï¤        ¤	        ¤
+        ê     
+Êê 	     `    ê                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       

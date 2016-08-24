@@ -1,0 +1,131 @@
+<?php
+/* Copyright (C) 2011 Dimitri Mouillard   <dmouillard@teclib.com>
+ * Copyright (C) 2015 Laurent Destailleur <eldy@users.sourceforge.net>
+ * Copyright (C) 2015 Alexandre Spangaro  <aspangaro.dolibarr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ *       \file       htdocs/expensereport/class/expensereport.class.php
+ *       \ingroup    expensereport
+ *       \brief      File to manage Expense Reports
+ */
+require_once DOL_DOCUMENT_ROOT .'/core/class/commonobject.class.php';
+
+/**
+ * Class to manage Trips and Expenses
+ */
+class ExpenseReport extends CommonObject
+{
+    var $db;
+    var $error;
+    var $element='expensereport';
+    var $table_element='expensereport';
+    var $table_element_line = 'expensereport_det';
+    var $fk_element = 'fk_expensereport';
+
+    var $id;
+    var $ref;
+    var $lignes=array();
+    var $total_ht;
+    var $total_tva;
+    var $total_ttc;
+    var $note_public;
+    var $note_private;
+    var $date_debut;
+    var $date_fin;
+
+    var $fk_user_validator;
+    var $status;
+    var $fk_statut;     // -- 1=draft, 2=validated (attente approb), 4=canceled, 5=approved, 6=payed, 99=denied
+    var $fk_c_paiement;
+    var $paid;
+
+    var $user_author_infos;
+    var $user_validator_infos;
+
+    var $fk_typepayment;
+	var $num_payment;
+    var $code_paiement;
+    var $code_statut;
+
+    // ACTIONS
+
+    // Create
+    var $date_create;
+    var $fk_user_author;
+
+    // Update
+	var $date_modif;
+    var $fk_user_modif;
+    
+    // Refus
+    var $date_refuse;
+    var $detail_refuse;
+    var $fk_user_refuse;
+
+    // Annulation
+    var $date_cancel;
+    var $detail_cancel;
+    var $fk_user_cancel;
+
+    // Validation
+    var $date_valid;
+    var $fk_user_valid;
+    var $user_valid_infos;
+
+    // Approve
+    var $date_approve;
+    var $fk_user_approve;
+
+    // Paiement
+    var $user_paid_infos;
+
+    /*
+        END ACTIONS
+    */
+
+
+    /**
+     *  Constructor
+     *
+     *  @param  DoliDB  $db     Handler acces base de donnees
+     */
+    function __construct($db)
+    {
+        $this->db = $db;
+        $this->total_ht = 0;
+        $this->total_ttc = 0;
+        $this->total_tva = 0;
+        $this->modepaymentid = 0;
+
+        // List of language codes for status
+        $this->statuts_short = array(0 => 'Draft', 2 => 'Validated', 4 => 'Canceled', 5 => 'Approved', 6 => 'Paid', 99 => 'Refused');
+        $this->statuts = array(0 => 'Draft', 2 => 'ValidatedWaitingApproval', 4 => 'Canceled', 5 => 'Approved', 6 => 'Paid', 99 => 'Refused');
+        $this->statuts_logo = array(0 => 'statut0', 2 => 'statut1', 4 => 'statut5', 5 => 'statut3', 6 => 'statut6', 99 => 'statut8');
+
+        return 1;
+    }
+
+    /**
+     * Create object in database
+     *
+     * @param   User    $user   User that create
+     * @return  int             <0 if KO, >0 if OK
+     */
+    function create($user)
+    {
+        global $conf;
+

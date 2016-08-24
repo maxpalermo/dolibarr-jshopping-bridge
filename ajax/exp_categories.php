@@ -1,0 +1,145 @@
+<?php
+
+header("Content-Type: text/event-stream\n\n");
+// recommended to prevent caching of event data.
+header('Cache-Control: no-cache');
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR .  "framework.php";
+require_once dirname(__FILE__) .  DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "class"  . DIRECTORY_SEPARATOR . "mysqlParams.class.php";
+
+session_start();
+$diff = $_SESSION["STRING_DIFF"];
+
+//send_message("LOOP", "DIFF: " . $diff, 100);
+//return;
+
+if(1==2){$db = new DoliDBMysqli("mysql", "localhost", "user", "pass");}
+$dbOut      = mysqlParams::getConnection();
+$langs      = mysqlParams::getLanguages();
+$pref       = mysqlParams::getPrefix();
+$tablename  = "jshopping_categories";
+
+session_start();
+$_SESSION["PB_STATUS"]="active";
+
+if(empty($diff))
+{
+    //DELETE CONTENT
+    $sqlDelete = "DELETE FROM " . $pref . $tablename;
+    $del = $dbOut->query($sqlDelete);
+    //print "DELETE $pref$tablename: $del\n";
+    if($del)
+    {
+        //RESET COUNTER
+        $SqlResetIncrement = "ALTER TABLE " . $pref . $tablename .  " AUTO_INCREMENT = 1";
+        $AI = $dbOut->query($SqlResetIncrement);
+        //print "AI: $AI\n";
+    }
+    else
+    {
+        send_message("CLOSE", "ERRORE" . $db->lasterrno() . $db->lasterror(), "100");
+    }
+}
+    
+    //PREPARE INSERT STATEMENT
+    $columns = [
+        "`category_id`",
+        "`category_parent_id`",
+        "`category_image`"
+    ];
+    foreach($langs as $lang)
+    {
+        $columns[] = "`name_" . $lang->tag . "`";
+        $columns[] = "`alias_" . $lang->tag . "`";
+    }
+    //GET DOLIBARR CATEGORIES COUNT
+    if(empty($diff))
+    {
+        $queryTot = "select count(*) as tot from " . MAIN_DB_PREFIX . "categorie";
+    }
+    else
+    {
+        $queryTot = "select count(*) as tot from " . MAIN_DB_PREFIX . "categorie where rowid in (" . $diff . ")";
+    }
+    
+    $count = $db->query($queryTot);
+    if($count)
+    {
+        $tot = $db->fetch_object($count)->tot;
+        //print "TOTAL RECORDS: $tot\n";
+    }
+    else
+    {
+        //print "Nessun record trovato: USCITA FORZATA\n";
+        send_message("CLOSE", "NESSUN RECORD TROVATO", 100);
+        return;
+    }
+    
+    //GET DOLIBARR CATEGORIES
+    if(empty($diff))
+    {
+        $queryCategorie="select * from " . MAIN_DB_PREFIX . "categorie";
+    }
+    else
+    {
+        $queryCategorie="select * from " . MAIN_DB_PREFIX . "categorie where rowid in (" . $diff . ")";
+    }
+    
+    $resultCategorie = $db->query($queryCategorie);
+    if($resultCategorie)
+    {
+        $curr = 0;
+        
+        session_start();
+        if($_SESSION["PB_STATUS"]=="terminated"){send_message("CLOSE", "OPERAZIONE ANNULLATA", 100); return;}
+        
+        //FETCH RECORDSET
+        while($rs = $db->fetch_object($result))
+        {
+            $values = [
+                $rs->rowid,
+                $rs->fk_parent,
+                mysqlParams::getImageCat("")
+            ];
+            foreach($langs as $lang)
+            {
+                $values[] = "'" . $db->escape($rs->label) . "'";
+                $values[] = "'" . $db->escape($rs->label) . "'";
+            }       
+            
+            $QueryInsert = "INSERT INTO " . $pref . $tablename . "(" . implode(",",$columns) . ") VALUES (" . implode(",",$values) . ");";
+            $success = $dbOut->query($QueryInsert);
+            if($success)
+            {
+                $curr++;
+                send_message('LOOP', "Esportazione di (" . $rs->rowid . ") " . $rs->label,  intval($curr*100/$tot));
+            }
+            else
+            {
+                $curr++;
+                send_message('CLOSE', 'Process error',100);
+            }
+        }
+        send_message('CLOSE', 'Process complete',100);
+    }
+    else
+    {
+        
+    }
+
+
+function send_message($id, $message, $progress) {
+    $d = array('message' => $message , 'progress' => $progress); //prepare json
+    echo "id: $id" . PHP_EOL;
+    echo "data: " . json_encode($d) . PHP_EOL;
+    echo PHP_EOL;
+
+    ob_end_flush();
+    flush();
+}
